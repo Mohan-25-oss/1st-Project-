@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Product from "../components/Product";
+import CartModal from "../components/CartModal";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -12,8 +13,27 @@ const Products = () => {
       setProducts(response.data);
     });
   }, []);
+      
 
-  console.log(products);
+  const [isCartModalOpen, setIsCartModalOpen] = useState(true);
+    const handleCartModalClose = () => {
+      setIsCartModalOpen(false);
+    };
+    const handleCartModalOpen = () => {
+      setIsCartModalOpen(true);
+  };
+
+  const [cartItems, setCartItems] = useState([]);
+
+  const fetchExistingCartList = () => {
+    const parsedProduct = JSON.parse(localStorage.getItem("cart"));
+    console.log(parsedProduct);
+    setCartItems(parsedProduct);
+  };
+
+  useEffect(() => {
+    fetchExistingCartList();
+  }, [])
 
   return (
     <section className="text-gray-600 body-font">
@@ -22,11 +42,23 @@ const Products = () => {
           {products &&
             products.length > 0 &&
             products.map((it) => {
-              return <Product key={it.id} product={it}></Product>;
+              return (
+                <Product
+                  handleCartModalOpen={handleCartModalOpen}
+                  key={it.id}
+                  product={it}
+                  fetchExistingCartList={fetchExistingCartList}
+                ></Product>
+              );
             })}
         </div>
       </div>
-    
+      
+      <CartModal
+        isCartModalOpen={isCartModalOpen}
+        handleCartModalClose={handleCartModalClose}
+        cartItems={cartItems} setCartItems={setCartItems}
+      ></CartModal>
     </section>
   );
 };

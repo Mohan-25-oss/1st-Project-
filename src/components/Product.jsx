@@ -4,6 +4,7 @@ import { Link } from "react-router";
 
 
 const Product = (props) => {
+  const { handleCartModalOpen, fetchExistingCartList } = props;
   const { title, image, price, id } = props.product;
 
   const handleAddToCart = () => {
@@ -19,21 +20,33 @@ const Product = (props) => {
     }; // existing product list  
     const existingProduct = localStorage.getItem("cart");
     const parsedCartProduct = JSON.parse(existingProduct);
-    // console.log(addToCartProduct);
-    // console.log(parsedCartProduct);
+    console.log(addToCartProduct);
+    console.log(parsedCartProduct);
     const isInCart =
       parsedCartProduct && parsedCartProduct.length > 0
         ? parsedCartProduct?.find((it) => it.id === id)
         : undefined;
-    // console.log(isInCart);
+    console.log(isInCart);
     if (isInCart === undefined) {
       if (parsedCartProduct && parsedCartProduct.length > 0) {
         const newCart = [...parsedCartProduct, addToCartProduct];
+        // console.log(newCart);
         const stringifyProduct = JSON.stringify(newCart);
         localStorage.setItem("cart", stringifyProduct);
+        toast.success(`The product has been added to the cart ${title}`, {
+          duration: 5000
+        });
+        handleCartModalOpen()
+        fetchExistingCartList()
       } else {
+        //add new cart item
         const stringifyProduct = JSON.stringify([addToCartProduct]);
         localStorage.setItem("cart", stringifyProduct);
+        toast.success(`The product has been added to the cart ${title}`, {
+          duration: 5000
+        });
+        handleCartModalOpen()
+        fetchExistingCartList()
       }
     } else {
       const stringifyProduct = JSON.stringify([addToCartProduct]);

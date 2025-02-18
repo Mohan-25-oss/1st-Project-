@@ -1,16 +1,7 @@
 import React, { useEffect, useState } from "react";
 
-const CartModal = ({ handleCartModalClose, isCartModalOpen }) => {
-  const [cartItems, setCartItems] = useState([]);
+const CartModal = ({ handleCartModalClose, isCartModalOpen, cartItems, setCartItems }) => {
 
-  useEffect(() => {
-    const parsedProduct = JSON.parse(localStorage.getItem("cart"));
-    // console.log(parsedProduct);
-    setCartItems(parsedProduct);
-  }, []);
-  
-
-  // console.log(cartItems);
   const handleMinus = (id) => {
     console.log(id);
     if (cartItems && cartItems.length > 0) {
@@ -30,7 +21,6 @@ const CartModal = ({ handleCartModalClose, isCartModalOpen }) => {
       }
     }
   };
-
 
   const handlePlus = (id) => {
     if (cartItems && cartItems.length > 0) {
